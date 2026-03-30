@@ -14,6 +14,8 @@ const navLinks = [
   { label: "Serviços", href: "#servicos" },
   { label: "Depoimentos", href: "#depoimentos" },
   { label: "Dicas", href: "#dicas" },
+  { label: "Preços", href: "#precos" },
+  { label: "Anamnese", href: "#anamnese" },
   { label: "Contato", href: "#contato" },
 ];
 

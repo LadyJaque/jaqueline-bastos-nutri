@@ -7,6 +7,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { trpc } from "@/lib/trpc";
 
 /* ── Asset URLs ── */
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/hero-nutri-HKpfukfuqZMzjSvFGNSyN3.webp";
@@ -873,18 +874,25 @@ function ContactForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const sendContactMutation = trpc.email.sendContact.useMutation();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Simular envio de formulário
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await sendContactMutation.mutateAsync({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        message: formData.message,
+      });
       setSubmitted(true);
       setFormData({ name: "", email: "", phone: "", message: "" });
       setTimeout(() => setSubmitted(false), 4000);
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
+      alert("Erro ao enviar mensagem. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -1288,6 +1296,722 @@ function Footer() {
 }
 
 /* ══════════════════════════════════════════════
+   PREÇOS SECTION
+══════════════════════════════════════════════ */
+function PrecosSection() {
+  const planos = [
+    {
+      nome: "Consulta Única",
+      preco: "R$ 120",
+      descricao: "Avaliação nutricional completa e orientações iniciais",
+      features: [
+        "Avaliação nutricional completa",
+        "Anamnese detalhada",
+        "Orientações iniciais",
+        "Duração: 1 hora",
+      ],
+      destaque: false,
+    },
+    {
+      nome: "Acompanhamento Mensal",
+      preco: "R$ 300",
+      descricao: "4 consultas com plano personalizado e suporte contínuo",
+      features: [
+        "4 consultas mensais",
+        "Plano alimentar personalizado",
+        "Ajustes conforme evolução",
+        "Suporte via WhatsApp",
+        "Melhor custo-benefício",
+      ],
+      destaque: true,
+    },
+    {
+      nome: "Plano Trimestral",
+      preco: "R$ 800",
+      descricao: "12 consultas com acompanhamento intensivo e resultados garantidos",
+      features: [
+        "12 consultas trimestrais",
+        "Plano alimentar detalhado",
+        "Acompanhamento intensivo",
+        "Suporte prioritário",
+        "Maior economia",
+        "Resultados mais visíveis",
+      ],
+      destaque: false,
+    },
+  ];
+
+  return (
+    <section
+      id="precos"
+      className="py-24 md:py-32"
+      style={{ background: "oklch(0.99 0.005 80)" }}
+    >
+      <div className="container">
+        <Reveal>
+          <SectionLabel>Investimento</SectionLabel>
+          <GoldLine className="mb-6" />
+          <h2
+            className="text-4xl md:text-5xl leading-tight mb-4"
+            style={{ fontFamily: "'Playfair Display', serif", color: "oklch(0.22 0.01 60)" }}
+          >
+            Planos de
+            <br />
+            <em style={{ color: "oklch(0.50 0.09 130)" }}>atendimento</em>
+          </h2>
+          <p
+            className="text-base leading-relaxed mb-16 max-w-2xl"
+            style={{ color: "oklch(0.50 0.01 60)", fontFamily: "'Lato', sans-serif", fontWeight: 300 }}
+          >
+            Escolha o plano que melhor se encaixa na sua jornada. Todos incluem suporte personalizado e acompanhamento próximo.
+          </p>
+        </Reveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {planos.map((plano, idx) => (
+            <Reveal key={idx} delay={idx * 100}>
+              <div
+                className={`p-8 transition-all duration-300 ${
+                  plano.destaque ? "shadow-xl scale-105" : "hover:shadow-lg"
+                }`}
+                style={{
+                  background: plano.destaque ? "oklch(0.50 0.09 130)" : "white",
+                  border: plano.destaque ? "none" : "1px solid oklch(0.90 0.01 60)",
+                }}
+              >
+                {plano.destaque && (
+                  <div
+                    className="text-xs font-bold tracking-widest uppercase mb-4"
+                    style={{ color: "oklch(0.99 0.005 80)", fontFamily: "'Lato', sans-serif" }}
+                  >
+                    ⭐ Mais Popular
+                  </div>
+                )}
+
+                <h3
+                  className="text-xl font-bold mb-2"
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    color: plano.destaque ? "white" : "oklch(0.22 0.01 60)",
+                  }}
+                >
+                  {plano.nome}
+                </h3>
+
+                <p
+                  className="text-sm mb-6"
+                  style={{
+                    color: plano.destaque ? "oklch(0.99 0.005 80 / 0.9)" : "oklch(0.50 0.01 60)",
+                    fontFamily: "'Lato', sans-serif",
+                    fontWeight: 300,
+                  }}
+                >
+                  {plano.descricao}
+                </p>
+
+                <div className="mb-8">
+                  <span
+                    className="text-4xl font-bold"
+                    style={{
+                      color: plano.destaque ? "white" : "oklch(0.50 0.09 130)",
+                      fontFamily: "'Playfair Display', serif",
+                    }}
+                  >
+                    {plano.preco}
+                  </span>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {plano.features.map((feature, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 text-sm"
+                      style={{
+                        color: plano.destaque ? "white" : "oklch(0.22 0.01 60)",
+                        fontFamily: "'Lato', sans-serif",
+                      }}
+                    >
+                      <span style={{ color: plano.destaque ? "oklch(0.99 0.005 80)" : "oklch(0.50 0.09 130)" }}>✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={WA_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 text-center text-sm font-bold tracking-widest uppercase transition-all duration-300"
+                  style={{
+                    background: plano.destaque ? "white" : "oklch(0.50 0.09 130)",
+                    color: plano.destaque ? "oklch(0.50 0.09 130)" : "white",
+                    fontFamily: "'Lato', sans-serif",
+                    letterSpacing: "0.15em",
+                  }}
+                >
+                  Agendar Consulta
+                </a>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   ANAMNESE SECTION (Multi-step form)
+══════════════════════════════════════════════ */
+function AnamneseSection() {
+  const sendAnamneseMutation = trpc.email.sendAnamnese.useMutation();
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    // Passo 1: Dados Pessoais
+    nome: "",
+    idade: "",
+    dataNascimento: "",
+    sexo: "",
+    altura: "",
+    peso: "",
+    telefone: "",
+    email: "",
+    // Passo 2: Objetivo e Saúde
+    objetivo: "",
+    metaEspecifica: "",
+    doencas: "",
+    cirurgias: "",
+    medicamentos: "",
+    alergias: "",
+    intestino: "",
+    // Passo 3: Hábitos e Comportamento
+    rotina: "",
+    refeicoes: "",
+    pularefeicoes: "",
+    compulsao: "",
+    consumo: [] as string[],
+    agua: "",
+    alcool: "",
+    atividade: "",
+    frequencia: "",
+    duracao: "",
+    sono: "",
+    qualidadeSono: "",
+    estresse: "",
+    comePor: [] as string[],
+    dietas: "",
+    resultado: "",
+    rebote: "",
+    alimentos: "",
+    restricoes: "",
+    comprometimento: "",
+    mudanca: "",
+    observacoes: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checked
+          ? [...(prev[name as keyof typeof prev] as string[]), value]
+          : (prev[name as keyof typeof prev] as string[]).filter((v) => v !== value),
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (step < 3) {
+      setStep(step + 1);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await sendAnamneseMutation.mutateAsync({
+        nome: formData.nome,
+        idade: formData.idade,
+        dataNascimento: formData.dataNascimento,
+        sexo: formData.sexo,
+        altura: formData.altura,
+        peso: formData.peso,
+        telefone: formData.telefone,
+        email: formData.email,
+        objetivo: formData.objetivo,
+        metaEspecifica: formData.metaEspecifica,
+        doencas: formData.doencas,
+        cirurgias: formData.cirurgias,
+        medicamentos: formData.medicamentos,
+        alergias: formData.alergias,
+        intestino: formData.intestino,
+        rotina: formData.rotina,
+        refeicoes: formData.refeicoes,
+        pularefeicoes: formData.pularefeicoes,
+        compulsao: formData.compulsao,
+        consumo: formData.consumo,
+        agua: formData.agua,
+        alcool: formData.alcool,
+        atividade: formData.atividade,
+        frequencia: formData.frequencia,
+        duracao: formData.duracao,
+        sono: formData.sono,
+        qualidadeSono: formData.qualidadeSono,
+        estresse: formData.estresse,
+        comePor: formData.comePor,
+        dietas: formData.dietas,
+        resultado: formData.resultado,
+        rebote: formData.rebote,
+        alimentos: formData.alimentos,
+        restricoes: formData.restricoes,
+        comprometimento: formData.comprometimento,
+        mudanca: formData.mudanca,
+        observacoes: formData.observacoes,
+      });
+      setSubmitted(true);
+      setTimeout(() => {
+        setStep(1);
+        setFormData({
+          nome: "", idade: "", dataNascimento: "", sexo: "", altura: "", peso: "", telefone: "", email: "",
+          objetivo: "", metaEspecifica: "", doencas: "", cirurgias: "", medicamentos: "", alergias: "", intestino: "",
+          rotina: "", refeicoes: "", pularefeicoes: "", compulsao: "", consumo: [], agua: "", alcool: "",
+          atividade: "", frequencia: "", duracao: "", sono: "", qualidadeSono: "", estresse: "", comePor: [],
+          dietas: "", resultado: "", rebote: "", alimentos: "", restricoes: "", comprometimento: "", mudanca: "", observacoes: "",
+        });
+        setSubmitted(false);
+      }, 4000);
+    } catch (error) {
+      console.error("Erro ao enviar anamnese:", error);
+      alert("Erro ao enviar anamnese. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section
+      id="anamnese"
+      className="py-24 md:py-32"
+      style={{ background: "oklch(0.99 0.005 80)" }}
+    >
+      <div className="container max-w-3xl">
+        <Reveal>
+          <SectionLabel>Avaliação Inicial</SectionLabel>
+          <GoldLine className="mb-6" />
+          <h2
+            className="text-4xl md:text-5xl leading-tight mb-4"
+            style={{ fontFamily: "'Playfair Display', serif", color: "oklch(0.22 0.01 60)" }}
+          >
+            Questionário de
+            <br />
+            <em style={{ color: "oklch(0.50 0.09 130)" }}>Anamnese</em>
+          </h2>
+          <p
+            className="text-base leading-relaxed mb-12"
+            style={{ color: "oklch(0.50 0.01 60)", fontFamily: "'Lato', sans-serif", fontWeight: 300 }}
+          >
+            Responda com calma em 3 passos. Suas respostas serão enviadas para jaquelinegomes929@gmail.com para que eu possa preparar uma avaliação personalizada.
+          </p>
+        </Reveal>
+
+        {/* Progress Bar */}
+        <div className="mb-12">
+          <div className="flex justify-between mb-4">
+            {[1, 2, 3].map((s) => (
+              <div
+                key={s}
+                className={`text-sm font-bold ${
+                  s <= step ? "text-white" : "text-gray-400"
+                }`}
+                style={{
+                  fontFamily: "'Lato', sans-serif",
+                  color: s <= step ? "oklch(0.50 0.09 130)" : "oklch(0.70 0.01 60)",
+                }}
+              >
+                Passo {s}
+              </div>
+            ))}
+          </div>
+          <div className="w-full h-2 bg-gray-200" style={{ background: "oklch(0.90 0.01 60)" }}>
+            <div
+              className="h-full transition-all duration-300"
+              style={{
+                width: `${(step / 3) * 100}%`,
+                background: "oklch(0.50 0.09 130)",
+              }}
+            />
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* PASSO 1: Dados Pessoais */}
+          {step === 1 && (
+            <Reveal>
+              <div className="space-y-6">
+                <h3
+                  className="text-2xl font-bold mb-6"
+                  style={{ fontFamily: "'Playfair Display', serif", color: "oklch(0.22 0.01 60)" }}
+                >
+                  👤 Dados Pessoais
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Nome Completo</label>
+                    <input type="text" name="nome" value={formData.nome} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Idade</label>
+                    <input type="number" name="idade" value={formData.idade} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Data de Nascimento</label>
+                    <input type="date" name="dataNascimento" value={formData.dataNascimento} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Sexo</label>
+                    <select name="sexo" value={formData.sexo} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}>
+                      <option value="">Selecione</option>
+                      <option value="Masculino">Masculino</option>
+                      <option value="Feminino">Feminino</option>
+                      <option value="Outro">Outro</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Altura (m)</label>
+                    <input type="number" step="0.01" name="altura" value={formData.altura} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Peso (kg)</label>
+                    <input type="number" step="0.1" name="peso" value={formData.peso} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Telefone / WhatsApp</label>
+                    <input type="tel" name="telefone" value={formData.telefone} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>E-mail</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          )}
+
+          {/* PASSO 2: Objetivo e Saúde */}
+          {step === 2 && (
+            <Reveal>
+              <div className="space-y-6">
+                <h3
+                  className="text-2xl font-bold mb-6"
+                  style={{ fontFamily: "'Playfair Display', serif", color: "oklch(0.22 0.01 60)" }}
+                >
+                  🎯 Objetivo e Saúde
+                </h3>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Qual seu principal objetivo?</label>
+                  <div className="space-y-2">
+                    {["Emagrecimento", "Ganho de massa muscular", "Reeducação alimentar", "Saúde / qualidade de vida"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="objetivo" value={opt} checked={formData.objetivo === opt} onChange={handleChange} required style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Tem alguma meta específica?</label>
+                  <textarea name="metaEspecifica" value={formData.metaEspecifica} onChange={handleChange} placeholder="Ex: perder 10kg, reduzir medidas, melhorar exames" rows={3} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Possui alguma doença diagnosticada?</label>
+                  <textarea name="doencas" value={formData.doencas} onChange={handleChange} placeholder="Ex: diabetes, hipertensão, etc." rows={2} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Faz uso de medicamentos?</label>
+                  <textarea name="medicamentos" value={formData.medicamentos} onChange={handleChange} placeholder="Quais medicamentos você toma?" rows={2} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Tem alergia ou intolerância alimentar?</label>
+                  <textarea name="alergias" value={formData.alergias} onChange={handleChange} placeholder="Quais?" rows={2} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Como está seu funcionamento intestinal?</label>
+                  <div className="space-y-2">
+                    {["Regular", "Preso", "Solto"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="intestino" value={opt} checked={formData.intestino === opt} onChange={handleChange} required style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          )}
+
+          {/* PASSO 3: Hábitos e Comportamento */}
+          {step === 3 && (
+            <Reveal>
+              <div className="space-y-6">
+                <h3
+                  className="text-2xl font-bold mb-6"
+                  style={{ fontFamily: "'Playfair Display', serif", color: "oklch(0.22 0.01 60)" }}
+                >
+                  🥗 Hábitos e Comportamento
+                </h3>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Como é sua rotina alimentar hoje?</label>
+                  <textarea name="rotina" value={formData.rotina} onChange={handleChange} placeholder="Descreva um dia comum..." rows={3} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Quantas refeições faz por dia?</label>
+                    <input type="number" name="refeicoes" value={formData.refeicoes} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Pula refeições?</label>
+                    <input type="text" name="pularefeicoes" value={formData.pularefeicoes} onChange={handleChange} placeholder="Quais?" className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Tem episódios de compulsão alimentar?</label>
+                  <div className="space-y-2">
+                    {["Não", "Sim, ocasionalmente", "Sim, frequentemente"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="compulsao" value={opt} checked={formData.compulsao === opt} onChange={handleChange} required style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Consome bastante:</label>
+                  <div className="space-y-2">
+                    {["Doces", "Frituras", "Industrializados", "Refrigerantes"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" name="consumo" value={opt} checked={formData.consumo.includes(opt)} onChange={handleChange} style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Litros de água por dia</label>
+                    <input type="number" step="0.5" name="agua" value={formData.agua} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Bebidas alcoólicas</label>
+                    <select name="alcool" value={formData.alcool} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}>
+                      <option value="">Selecione</option>
+                      <option value="Não">Não</option>
+                      <option value="Raramente">Raramente</option>
+                      <option value="Fins de semana">Fins de semana</option>
+                      <option value="Frequentemente">Frequentemente</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Pratica atividade física?</label>
+                  <div className="space-y-2">
+                    {["Não", "Sim"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="atividade" value={opt} checked={formData.atividade === opt} onChange={handleChange} required style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {formData.atividade === "Sim" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Frequência semanal</label>
+                      <input type="text" name="frequencia" value={formData.frequencia} onChange={handleChange} placeholder="Ex: 3x por semana" className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Duração média</label>
+                      <input type="text" name="duracao" value={formData.duracao} onChange={handleChange} placeholder="Ex: 1 hora" className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Horas de sono por noite</label>
+                    <input type="number" step="0.5" name="sono" value={formData.sono} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Qualidade do sono</label>
+                    <select name="qualidadeSono" value={formData.qualidadeSono} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}>
+                      <option value="">Selecione</option>
+                      <option value="Bom">Bom</option>
+                      <option value="Regular">Regular</option>
+                      <option value="Ruim">Ruim</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Nível de estresse (0-10)</label>
+                  <input type="number" min="0" max="10" name="estresse" value={formData.estresse} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Você come por:</label>
+                  <div className="space-y-2">
+                    {["Fome", "Ansiedade", "Tédio", "Emoção"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" name="comePor" value={opt} checked={formData.comePor.includes(opt)} onChange={handleChange} style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Já fez dieta antes?</label>
+                  <div className="space-y-2">
+                    {["Não", "Sim"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="dietas" value={opt} checked={formData.dietas === opt} onChange={handleChange} required style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {formData.dietas === "Sim" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Teve resultado?</label>
+                      <select name="resultado" value={formData.resultado} onChange={handleChange} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}>
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Teve efeito rebote?</label>
+                      <select name="rebote" value={formData.rebote} onChange={handleChange} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}>
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Alimentos que gosta</label>
+                  <textarea name="alimentos" value={formData.alimentos} onChange={handleChange} placeholder="Liste seus alimentos favoritos" rows={2} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Restrições alimentares</label>
+                  <textarea name="restricoes" value={formData.restricoes} onChange={handleChange} placeholder="Religiosa, ética, etc." rows={2} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>De 0 a 10, quanto você está disposto(a) a seguir o plano?</label>
+                  <input type="number" min="0" max="10" name="comprometimento" value={formData.comprometimento} onChange={handleChange} required className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Está disposto(a) a mudar hábitos?</label>
+                  <div className="space-y-2">
+                    {["Sim, totalmente", "Sim, parcialmente", "Não tenho certeza"].map((opt) => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="mudanca" value={opt} checked={formData.mudanca === opt} onChange={handleChange} required style={{ accentColor: "oklch(0.50 0.09 130)" }} />
+                        <span style={{ color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}>Observações adicionais</label>
+                  <textarea name="observacoes" value={formData.observacoes} onChange={handleChange} placeholder="Quer me contar mais alguma coisa importante?" rows={3} className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none" style={{ borderColor: "oklch(0.80 0.04 130)", background: "transparent", color: "oklch(0.22 0.01 60)", fontFamily: "'Lato', sans-serif" }} onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")} onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")} />
+                </div>
+              </div>
+            </Reveal>
+          )}
+
+          {/* Buttons */}
+          <div className="flex gap-4 justify-between mt-8">
+            {step > 1 && (
+              <button
+                type="button"
+                onClick={() => setStep(step - 1)}
+                className="px-8 py-3 text-sm font-bold tracking-widest uppercase transition-all duration-300"
+                style={{
+                  background: "transparent",
+                  border: "2px solid oklch(0.50 0.09 130)",
+                  color: "oklch(0.50 0.09 130)",
+                  fontFamily: "'Lato', sans-serif",
+                  letterSpacing: "0.15em",
+                }}
+              >
+                Voltar
+              </button>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="ml-auto px-8 py-3 text-white text-sm font-bold tracking-widest uppercase transition-all duration-300 disabled:opacity-50"
+              style={{
+                background: "oklch(0.50 0.09 130)",
+                fontFamily: "'Lato', sans-serif",
+                letterSpacing: "0.15em",
+              }}
+            >
+              {step === 3 ? (loading ? "Enviando..." : "Enviar Anamnese") : "Próximo"}
+            </button>
+          </div>
+
+          {submitted && (
+            <div
+              className="p-4 text-sm font-semibold text-white text-center"
+              style={{ background: "oklch(0.50 0.09 130)", fontFamily: "'Lato', sans-serif" }}
+            >
+              ✓ Anamnese enviada com sucesso! Você receberá um retorno em breve.
+            </div>
+          )}
+        </form>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════
    FLOATING WHATSAPP BUTTON
 ══════════════════════════════════════════════ */
 function FloatingWA() {
@@ -1320,6 +2044,8 @@ export default function Home() {
       <ComoFuncionaSection />
       <DepoimentosSection />
       <DicasSection />
+      <PrecosSection />
+      <AnamneseSection />
       <FaqSection />
       <ContatoSection />
       <Footer />
