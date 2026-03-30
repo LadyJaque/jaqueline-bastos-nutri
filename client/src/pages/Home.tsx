@@ -1097,7 +1097,7 @@ function ContatoSection() {
                       </svg>
                     ),
                     label: "WhatsApp",
-                    value: "(00) 00000-0000",
+                    value: "(18) 99787-1633",
                     href: WA_LINK,
                   },
                   {

@@ -9,6 +9,9 @@
 - [x] Escrever testes unitários com Vitest (server/email.test.ts)
 - [x] Validar funcionamento dos testes
 
+## Atualizações Visuais
+- [x] Atualizar número de telefone de placeholder para (18) 99787-1633
+
 ## Próximas Melhorias (Futuro)
 - [ ] Adicionar envio de e-mail para o proprietário quando um formulário é submetido
 - [ ] Implementar templates de e-mail customizados
