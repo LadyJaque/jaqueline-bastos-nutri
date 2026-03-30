@@ -11,6 +11,7 @@
 
 ## Atualizações Visuais
 - [x] Atualizar número de telefone de placeholder para (18) 99787-1633
+- [x] Criar arquivo index.html para GitHub Pages com documentação do projeto
 
 ## Próximas Melhorias (Futuro)
 - [ ] Adicionar envio de e-mail para o proprietário quando um formulário é submetido

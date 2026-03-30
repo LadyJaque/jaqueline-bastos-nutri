@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jaqueline Bastos Nutricionista - Reeducação alimentar online com plano personalizado">
+    <meta name="keywords" content="nutricionista, online, reeducação alimentar, plano personalizado">
+    <meta name="author" content="Jaqueline Bastos">
+    <title>Jaqueline Bastos Nutricionista - Reeducação Alimentar Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f5f0 0%, #ffffff 100%);
+        }
+
+        header {
+            background: linear-gradient(135deg, oklch(0.50 0.09 130) 0%, oklch(0.45 0.08 130) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            margin: 40px 0;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        section h2 {
+            color: oklch(0.50 0.09 130);
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+            border-bottom: 3px solid oklch(0.50 0.09 130);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            color: oklch(0.45 0.08 130);
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid oklch(0.50 0.09 130);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h4 {
+            color: oklch(0.50 0.09 130);
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .tech-item strong {
+            color: oklch(0.50 0.09 130);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: oklch(0.50 0.09 130);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .cta-button:hover {
+            background: oklch(0.45 0.08 130);
+            transform: scale(1.05);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid oklch(0.50 0.09 130);
+            color: oklch(0.50 0.09 130);
+            margin-left: 10px;
+        }
+
+        .cta-button.secondary:hover {
+            background: oklch(0.93 0.04 130);
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, oklch(0.93 0.04 130) 0%, #f5f5f0 100%);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-item strong {
+            color: oklch(0.50 0.09 130);
+            min-width: 100px;
+        }
+
+        .contact-item a {
+            color: oklch(0.50 0.09 130);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: oklch(0.50 0.09 130);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid oklch(0.50 0.09 130);
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            section {
+                padding: 20px;
+            }
+
+            section h2 {
+                font-size: 1.5em;
+            }
+
+            .cta-button.secondary {
+                display: block;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🥗 Jaqueline Bastos Nutricionista</h1>
+        <p>Reeducação Alimentar Online com Plano Personalizado</p>
+    </header>
+
+    <div class="container">
+        <!-- Sobre o Projeto -->
+        <section>
+            <h2>📋 Sobre o Projeto</h2>
+            <p>
+                Este é o repositório do site profissional de <strong>Jaqueline Bastos Nutricionista</strong>, 
+                uma plataforma moderna de reeducação alimentar 100% online. O projeto foi desenvolvido com 
+                tecnologias de ponta para oferecer uma experiência excepcional aos clientes.
+            </p>
+            <p style="margin-top: 15px;">
+                O site apresenta informações sobre os serviços, permite agendamento de consultas via WhatsApp 
+                e oferece um formulário de anamnese detalhado para coleta de dados nutricionais dos clientes.
+            </p>
+        </section>
+
+        <!-- Funcionalidades -->
+        <section>
+            <h2>✨ Funcionalidades Principais</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h4>📧 Sistema de E-mail Automático</h4>
+                    <p>Envio automático de e-mails para confirmação de formulários de contato e anamnese com formatação profissional em HTML.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📝 Formulário de Anamnese</h4>
+                    <p>Formulário multi-step completo para coleta de dados nutricionais, histórico de saúde e hábitos alimentares.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💬 Formulário de Contato</h4>
+                    <p>Formulário simples para visitantes entrarem em contato com confirmação automática por e-mail.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Design Responsivo</h4>
+                    <p>Interface moderna e responsiva que funciona perfeitamente em desktop, tablet e dispositivos móveis.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 Design Premium</h4>
+                    <p>Design "Sage Editorial" com minimalismo escandinavo e luxo wellness, cores sofisticadas e tipografia elegante.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔐 Autenticação OAuth</h4>
+                    <p>Sistema de autenticação seguro com Manus OAuth integrado para gerenciamento de usuários.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stack Tecnológico -->
+        <section>
+            <h2>🛠️ Stack Tecnológico</h2>
+            <p>O projeto utiliza um stack moderno e robusto para garantir performance, segurança e escalabilidade:</p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Frontend</strong>
+                    React 19 + TypeScript
+                </div>
+                <div class="tech-item">
+                    <strong>Styling</strong>
+                    Tailwind CSS 4 + OKLCH Colors
+                </div>
+                <div class="tech-item">
+                    <strong>Backend</strong>
+                    Express 4 + Node.js
+                </div>
+                <div class="tech-item">
+                    <strong>API</strong>
+                    tRPC 11 (Type-safe RPC)
+                </div>
+                <div class="tech-item">
+                    <strong>Database</strong>
+                    MySQL/TiDB + Drizzle ORM
+                </div>
+                <div class="tech-item">
+                    <strong>Authentication</strong>
+                    Manus OAuth + JWT
+                </div>
+                <div class="tech-item">
+                    <strong>Email</strong>
+                    Resend / SendGrid API
+                </div>
+                <div class="tech-item">
+                    <strong>Testing</strong>
+                    Vitest + React Testing Library
+                </div>
+            </div>
+        </section>
+
+        <!-- Sistema de E-mail -->
+        <section>
+            <h2>📧 Sistema de E-mail Automático</h2>
+            <p>
+                O projeto implementa um sistema robusto de envio de e-mails que integra automaticamente com os formulários do site.
+            </p>
+
+            <h3>Provedores Suportados</h3>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>Resend</strong> - Recomendado para projetos modernos</li>
+                <li><strong>SendGrid</strong> - Provedor robusto e confiável</li>
+                <li><strong>Gmail</strong> - Via Nodemailer com senha de app</li>
+            </ul>
+
+            <h3>Funcionalidades</h3>
+            <div class="features">
+                <div class="feature-card">
+                    <h4>✉️ E-mail de Anamnese</h4>
+                    <p>Envia a anamnese completa formatada em HTML para o cliente com todos os dados preenchidos.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>✉️ E-mail de Contato</h4>
+                    <p>Confirmação automática de mensagens de contato com formatação profissional.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔄 Tratamento de Erros</h4>
+                    <p>Sistema robusto com tratamento de erros e logging detalhado de todas as operações.</p>
+                </div>
+            </div>
+
+            <h3>Configuração</h3>
+            <p>Para usar o sistema de e-mail, configure as seguintes variáveis de ambiente:</p>
+            <div class="code-block">
+EMAIL_PROVIDER=resend
+EMAIL_API_KEY=sua_chave_api_aqui
+EMAIL_FROM_ADDRESS=noreply@nutrijaquebastos.com
+            </div>
+        </section>
+
+        <!-- Testes -->
+        <section>
+            <h2>✅ Testes Unitários</h2>
+            <p>
+                O projeto inclui testes unitários completos com <strong>Vitest</strong> para garantir a qualidade do código:
+            </p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>7 testes automatizados, todos passando ✓</li>
+                <li>Cobertura de formatação de e-mail em HTML</li>
+                <li>Validação de tratamento de erros</li>
+                <li>Testes de integração com tRPC</li>
+            </ul>
+            <p style="margin-top: 15px;">
+                Execute os testes com: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">pnpm test</code>
+            </p>
+        </section>
+
+        <!-- Estrutura do Projeto -->
+        <section>
+            <h2>📁 Estrutura do Projeto</h2>
+            <div class="code-block">
+jaqueline-bastos-nutri/
+├── client/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   └── Home.tsx          # Página principal com formulários
+│   │   ├── components/           # Componentes reutilizáveis
+│   │   ├── lib/
+│   │   │   └── trpc.ts          # Cliente tRPC
+│   │   └── index.css            # Estilos globais
+│   └── public/                   # Assets estáticos
+├── server/
+│   ├── _core/
+│   │   ├── email.ts             # Módulo de e-mail
+│   │   ├── env.ts               # Variáveis de ambiente
+│   │   └── trpc.ts              # Setup tRPC
+│   ├── routers.ts               # Procedimentos tRPC
+│   ├── email.test.ts            # Testes unitários
+│   └── db.ts                    # Helpers de banco de dados
+├── drizzle/
+│   ├── schema.ts                # Schema do banco de dados
+│   └── migrations/              # Migrações
+└── index.html                   # Esta página
+            </div>
+        </section>
+
+        <!-- Como Usar -->
+        <section>
+            <h2>🚀 Como Usar</h2>
+            
+            <h3>Instalação</h3>
+            <div class="code-block">
+# Clonar o repositório
+git clone https://github.com/seu-usuario/jaqueline-bastos-nutri.git
+cd jaqueline-bastos-nutri
+
+# Instalar dependências
+pnpm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env.local
+
+# Executar migrations do banco de dados
+pnpm db:push
+
+# Iniciar servidor de desenvolvimento
+pnpm dev
+            </div>
+
+            <h3>Executar Testes</h3>
+            <div class="code-block">
+pnpm test
+            </div>
+
+            <h3>Build para Produção</h3>
+            <div class="code-block">
+pnpm build
+            </div>
+        </section>
+
+        <!-- Contato -->
+        <section>
+            <h2>📞 Entre em Contato</h2>
+            <p>Para agendamentos, dúvidas ou mais informações sobre os serviços:</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>WhatsApp:</strong>
+                    <a href="https://wa.me/18997871633" target="_blank">(18) 99787-1633</a>
+                </div>
+                <div class="contact-item">
+                    <strong>E-mail:</strong>
+                    <a href="mailto:jaquelinegomes929@gmail.com">jaquelinegomes929@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <strong>Instagram:</strong>
+                    <a href="https://instagram.com/nutrijaquebastos" target="_blank">@nutrijaquebastos</a>
+                </div>
+                <div class="contact-item">
+                    <strong>Site:</strong>
+                    <a href="https://jaqunutri-qyrwyv9c.manus.space" target="_blank">jaqunutri-qyrwyv9c.manus.space</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tecnologias Utilizadas -->
+        <section>
+            <h2>🏷️ Badges & Tecnologias</h2>
+            <div style="margin-top: 20px;">
+                <span class="badge">React 19</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Tailwind CSS 4</span>
+                <span class="badge">Express.js</span>
+                <span class="badge">tRPC</span>
+                <span class="badge">MySQL</span>
+                <span class="badge">Drizzle ORM</span>
+                <span class="badge">Vitest</span>
+                <span class="badge">OAuth</span>
+                <span class="badge">Email API</span>
+            </div>
+        </section>
+
+        <!-- Licença -->
+        <section>
+            <h2>📄 Licença</h2>
+            <p>
+                Este projeto é proprietário e desenvolvido exclusivamente para Jaqueline Bastos Nutricionista.
+                Todos os direitos reservados © 2026.
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        <p><strong>Jaqueline Bastos Nutricionista</strong></p>
+        <p>Reeducação Alimentar Online com Plano Personalizado</p>
+        <p style="margin-top: 20px; opacity: 0.7;">© 2026 - Desenvolvido com ❤️ usando Manus</p>
+    </footer>
+</body>
+</html>
