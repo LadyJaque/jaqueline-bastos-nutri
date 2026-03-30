@@ -856,6 +856,176 @@ function FaqSection() {
 }
 
 /* ══════════════════════════════════════════════
+   CONTACT FORM COMPONENT
+══════════════════════════════════════════════ */
+function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Simular envio de formulário
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (error) {
+      console.error("Erro ao enviar formulário:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-xs font-bold tracking-widest uppercase mb-3"
+            style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}
+          >
+            Nome
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none"
+            style={{
+              borderColor: "oklch(0.80 0.04 130)",
+              background: "transparent",
+              color: "oklch(0.22 0.01 60)",
+              fontFamily: "'Lato', sans-serif",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-xs font-bold tracking-widest uppercase mb-3"
+            style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}
+          >
+            E-mail
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none"
+            style={{
+              borderColor: "oklch(0.80 0.04 130)",
+              background: "transparent",
+              color: "oklch(0.22 0.01 60)",
+              fontFamily: "'Lato', sans-serif",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          htmlFor="phone"
+          className="block text-xs font-bold tracking-widest uppercase mb-3"
+          style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}
+        >
+          Telefone (opcional)
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none"
+          style={{
+            borderColor: "oklch(0.80 0.04 130)",
+            background: "transparent",
+            color: "oklch(0.22 0.01 60)",
+            fontFamily: "'Lato', sans-serif",
+          }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="message"
+          className="block text-xs font-bold tracking-widest uppercase mb-3"
+          style={{ color: "oklch(0.66 0.10 130)", fontFamily: "'Lato', sans-serif", letterSpacing: "0.15em" }}
+        >
+          Mensagem
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+          rows={5}
+          className="w-full px-4 py-3 border-b-2 transition-colors focus:outline-none resize-none"
+          style={{
+            borderColor: "oklch(0.80 0.04 130)",
+            background: "transparent",
+            color: "oklch(0.22 0.01 60)",
+            fontFamily: "'Lato', sans-serif",
+          }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "oklch(0.50 0.09 130)")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "oklch(0.80 0.04 130)")}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full md:w-auto px-10 py-4 text-white text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:opacity-90 hover:shadow-lg disabled:opacity-50"
+        style={{
+          background: "oklch(0.50 0.09 130)",
+          fontFamily: "'Lato', sans-serif",
+          letterSpacing: "0.15em",
+        }}
+      >
+        {loading ? "Enviando..." : "Enviar Mensagem"}
+      </button>
+
+      {submitted && (
+        <div
+          className="p-4 text-sm font-semibold text-white"
+          style={{ background: "oklch(0.50 0.09 130)", fontFamily: "'Lato', sans-serif" }}
+        >
+          ✓ Mensagem enviada com sucesso! Entraremos em contato em breve.
+        </div>
+      )}
+    </form>
+  );
+}
+
+/* ══════════════════════════════════════════════
    CONTATO SECTION
 ══════════════════════════════════════════════ */
 function ContatoSection() {
@@ -997,6 +1167,27 @@ function ContatoSection() {
               </a>
             </Reveal>
           </div>
+        </div>
+
+        {/* Contact Form */}
+        <div className="mt-16 lg:mt-0 lg:col-span-2">
+          <Reveal>
+            <div className="p-8 md:p-12" style={{ background: "oklch(0.99 0.005 80)" }}>
+              <h3
+                className="text-2xl md:text-3xl mb-2"
+                style={{ fontFamily: "'Playfair Display', serif", color: "oklch(0.22 0.01 60)" }}
+              >
+                Envie uma mensagem
+              </h3>
+              <p
+                className="text-sm mb-8"
+                style={{ color: "oklch(0.50 0.01 60)", fontFamily: "'Lato', sans-serif", fontWeight: 300 }}
+              >
+                Preencha o formulário abaixo e entraremos em contato em breve.
+              </p>
+              <ContactForm />
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
