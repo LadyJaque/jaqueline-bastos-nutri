@@ -10,11 +10,11 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 /* ── Asset URLs ── */
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/hero-nutri-HKpfukfuqZMzjSvFGNSyN3.webp";
-const ABOUT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/about-nutri-P2McfBkFp8yQ7Le5Fircbf.webp";
+const ABOUT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/jaqueline-foto_ce2b6d6d.png";
 const FOOD_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/food-nutri-bJxhXK9CNem6woPiJSsXJG.webp";
 const CONSULT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/consult-nutri-fKhERVTEFch6ABzmVtg6pK.webp";
 const LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663491809810/QYRWyV9C8EsTicJN889V5q/logo-jaqueline_8b99bb51.png";
-const WA_LINK = "https://wa.me/5500000000000?text=Olá%20Jaqueline!%20Gostaria%20de%20agendar%20uma%20consulta.";
+const WA_LINK = "https://wa.me/18997871633?text=Olá%20Jaqueline!%20Gostaria%20de%20agendar%20uma%20consulta.";
 
 /* ── Reusable section label ── */
 function SectionLabel({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
@@ -669,7 +669,7 @@ function DicasSection() {
               </h2>
             </div>
             <a
-              href="https://instagram.com/seuuser"
+              href="https://instagram.com/nutrijaquebastos"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase link-underline"
@@ -931,8 +931,8 @@ function ContatoSection() {
                       </svg>
                     ),
                     label: "Instagram",
-                    value: "@seuuser",
-                    href: "https://instagram.com/seuuser",
+                    value: "@nutrijaquebastos",
+                    href: "https://instagram.com/nutrijaquebastos",
                   },
                   {
                     icon: (
@@ -942,8 +942,8 @@ function ContatoSection() {
                       </svg>
                     ),
                     label: "E-mail",
-                    value: "seuemail@email.com",
-                    href: "mailto:seuemail@email.com",
+                    value: "jaquelinegomes929@gmail.com",
+                    href: "mailto:jaquelinegomes929@gmail.com",
                   },
                 ].map((item) => (
                   <a
@@ -1064,7 +1064,7 @@ function Footer() {
               </svg>
             </a>
             <a
-              href="https://instagram.com/seuuser"
+              href="https://instagram.com/nutrijaquebastos"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 flex items-center justify-center transition-colors hover:bg-[oklch(0.50_0.09_130)]"
